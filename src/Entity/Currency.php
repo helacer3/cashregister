@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Energizee\Chatbot\Core\Entity;
+namespace App\Entity;
 
 // base Class
 use App\BaseClass\BaseEntity;

@@ -1,5 +1,4 @@
 <?php
-
 /** 
  *
  * @author Snayder Acero <hacero@viajemos.com>
@@ -14,9 +13,7 @@ namespace App\Entity;
 
 // base Class
 use App\BaseClass\BaseEntity;
-
-
-use Energizee\Service\Classes\Database\BaseEntity;
+// service
 use Doctrine\ORM\Mapping as ORM;
 
 // entities
