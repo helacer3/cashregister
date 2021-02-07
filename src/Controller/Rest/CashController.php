@@ -5,9 +5,9 @@ namespace App\Controller\Rest;
 use App\BaseClass\BaseRest;
 
 // services
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Core\ItemClass\CashRegisterClass;
 
 /**
  * Controlador del servicio rest para la caja registradora
@@ -18,17 +18,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class CashController extends BaseRest
 {
-    // class Vars
-    protected $em;
-
-    /**
-     * Construct
-     */
-    public function __construct(EntityManagerInterface $em)
-    {
-		  $this->em = $em;
-    }
-
     /**
     * @Route("/initialCharge")
     */
@@ -38,8 +27,13 @@ class CashController extends BaseRest
       $response    = new JsonResponse();
       // instance User API
       $cashClass   = new CashRegisterClass();
+      // request Body Content
+      $bodContent  = json_decode($this->request->getCurrentRequest()->getContent());
+      echo "<pre>";print_r($this->request->getCurrentRequest()->getContent());echo "</pre>";die;
+      // request Array Values
+      $chrcash     = (property_exists($bodContent, "chrcash")) ? $bodContent->chrcash : array();
       // available User Agents
-      $arrResponse = $cashClass->initialChargeCashRegister($arrValues);
+      $arrResponse = $cashClass->initialChargeCashRegister($chrcash);
       // set Data Response
   		$response->setData($arrResponse);
       // default Return
@@ -47,16 +41,22 @@ class CashController extends BaseRest
     }
 
     /**
-    * @Route("/makePayment")
+    * @Route("/makePayment", methods={"POST"})
     */
     public function makePaymentCash()
     {
       // instance Response 
-      $response    = new JsonResponse();
+      $response     = new JsonResponse();
       // instance User API
-      $cashClass   = new CashRegisterClass();
+      $cashClass    = new CashRegisterClass();
+      // request Body Content
+      $bodContent   = json_decode($this->request->getCurrentRequest()->getContent());
+      // request Value Payment
+      $valPayment   = (property_exists($bodContent, "valPayment")) ? $bodContent->valPayment : 0;
+      // request Value Received
+      $valDelivered = (property_exists($bodContent, "valDelivered")) ? $bodContent->valDelivered : 0;
       // available User Agents
-      $arrResponse = $cashClass->transactionCashRegister($valPayment, $valReceived);
+      $arrResponse  = $cashClass->transactionCashRegister($valPayment, $valDelivered);
       // set Data Response
       $response->setData($arrResponse);
       // default Return
@@ -64,7 +64,7 @@ class CashController extends BaseRest
     }
 
     /**
-    * @Route("/statusCash")
+    * @Route("/statusCash", methods={"POST"})
     */
     public function viewStatusCash()
     {
@@ -72,8 +72,8 @@ class CashController extends BaseRest
       $response    = new JsonResponse();
       // instance User API
       $cashClass   = new CashRegisterClass();
-      // available User Agents
-      $arrResponse = array(); //$cashClass->($this->em);
+      // remove Cash Register
+      $arrResponse = $cashClass->statusCashRegister();
       // set Data Response
       $response->setData($arrResponse);
       // default Return
@@ -81,7 +81,7 @@ class CashController extends BaseRest
     }
 
     /**
-    * @Route("/removeCharge")
+    * @Route("/removeCharge", methods={"POST"})
     */
     public function removeChargeCash()
     {
@@ -89,8 +89,8 @@ class CashController extends BaseRest
       $response    = new JsonResponse();
       // instance User API
       $cashClass   = new CashRegisterClass();
-      // available User Agents
-      $arrResponse = array(); //$cashClass->($this->em);
+      // remove Cash Register
+      $arrResponse = $cashClass->removeCashRegister();
       // set Data Response
       $response->setData($arrResponse);
       // default Return
@@ -98,7 +98,7 @@ class CashController extends BaseRest
     }
 
     /**
-    * @Route("/logCash")
+    * @Route("/logCash", methods={"POST"})
     */
     public function logByDateCash()
     {
@@ -106,8 +106,12 @@ class CashController extends BaseRest
       $response    = new JsonResponse();
       // instance User API
       $cashClass   = new CashRegisterClass();
+      // request Body Content
+      $bodContent  = json_decode($this->request->getCurrentRequest()->getContent());
+      // request Log Date
+      $logDate     = (property_exists($bodContent, "logDate")) ? $bodContent->logDate : date("Y-m-d");
       // available User Agents
-      $arrResponse = array(); //$cashClass->($this->em);
+      $arrResponse = $cashClass->loadLogCashRegister($logDate);
       // set Data Response
       $response->setData($arrResponse);
       return $response;

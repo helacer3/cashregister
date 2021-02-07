@@ -17,7 +17,7 @@ class CashRegisterClass
 		// default Response
 		$arrResponse = array("status" => "ERROR", "message" => "No se logró realizar la carga inicial");
 		// status Cash Register
-		$sttCash     = $cshRegister->statusCashRegister();
+		$sttCash     = $cshRegister->registerCashValues($arrValues);
 		// default Response
 		$arrResponse = array("status" => "OK", "message" => "Carga inicial Realizada");
 		// default Return
@@ -89,4 +89,80 @@ class CashRegisterClass
 		// default Return
 		return $arrResponse;
 	}
+
+    /**
+	* load Cash Register
+	*/
+	public function loadCashRegister(): array {
+		// default Var
+		$arrValues = array();
+		// default Response
+		$arrResponse   = array("status" => "Error", "message" => "No fue posible consultar el estado actual de la caja", "data" => array());
+		// instance BL
+		$cshRegister   = new CashRegisterBL();
+		// calculate Actual Cash
+		$actCashStatus = $cshRegister->statusCashRegister();
+		// validate Actual Cash
+		if (count($actCashStatus) > 0) {
+			// iterate Actual Cash
+			foreach ($actCashvalue as $value) {
+				// push Array Values
+				array_push($arrValues, array($value->getIdCurrency()->getValue() => $value->getQuantity()));
+			}
+			// set Array Response
+			$arrResponse  = array("status" => "OK", "message" => "Estado actual de la caja", "data" => array('crccash' => $arrValues));
+		} else {
+			// set Array Response
+			$arrResponse = array("status" => "Error", "message" => "La caja actualmente está vacia", "data" => array());
+		}
+		// default Return
+		return $arrResponse;
+	}
+
+
+	/**
+	* remove Cash Register
+	*/
+	public function removeCashRegister(): array {
+		// default Response
+		$arrResponse  = array("status" => "Error", "message" => "No fue posible retirar el dinero de la caja", "data" => array());
+		// instance BL
+		$cshRegister  = new CashRegisterBL();
+		// calculate Actual Cash
+		$actCashvalue = $cshRegister->calculateActualCash();
+		// validate Actual Cash
+		if ($actCashvalue > 0) {
+			// remove Cash Values
+			if ($cshRegister->removeCashValues()) {
+				// set Array Response
+				$arrResponse  = array("status" => "OK", "message" => "Se realiza el retiro de todo el dinero de la caja", "data" => array('actCashValue' => $actCashvalue));
+			}
+		} else {
+			$arrResponse  = array("status" => "Error", "message" => "No hay dinero disponible en la caja, para retirar", "data" => array());
+		}
+		// default Return
+		return $arrResponse;
+	}
+
+	/**
+	* load Log Cash Register
+	*/
+	public function loadLogCashRegister($logDate): array {
+		// default Response
+		$arrResponse  = array("status" => "Error", "message" => "No fue posible consultar el log de movimientos", "data" => array());
+		// instance BL
+		$cshRegister  = new CashRegisterBL();
+		// calculate Actual Cash
+		$actCashLog   = $cshRegister->statusCashLog($logDate);
+		// validate Actual Cash
+		if (count($actCashLog) > 0) {
+			// set Array Response
+			$arrResponse  = array("status" => "OK", "message" => "Log de movimientos realizados desde solicitada: ", "data" => array('actCashLog' => $actCashLog));
+		} else {
+			$arrResponse  = array("status" => "Error", "message" => "No se encontró histórico de movimientos para la fecha indicada", "data" => array());
+		}
+		// default Return
+		return $arrResponse;
+	}
+
 }
