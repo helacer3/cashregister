@@ -19,17 +19,17 @@ use App\Core\ItemClass\CashRegisterClass;
 class CashController extends BaseRest
 {
     /**
-    * @Route("/initialCharge")
+    * @Route("/initialCharge", name="initial_charge",  methods={"POST", "GET"})
     */
-    public function initialChargeCash()
+    public function initialChargeCash(): JsonResponse
     {
+      // echo "<pre>";print_r($_POST);echo "</pre>";die;
       // instance Response 
       $response    = new JsonResponse();
       // instance User API
       $cashClass   = new CashRegisterClass();
       // request Body Content
       $bodContent  = json_decode($this->request->getCurrentRequest()->getContent());
-      echo "<pre>";print_r($this->request->getCurrentRequest()->getContent());echo "</pre>";die;
       // request Array Values
       $chrcash     = (property_exists($bodContent, "chrcash")) ? $bodContent->chrcash : array();
       // available User Agents
@@ -41,9 +41,9 @@ class CashController extends BaseRest
     }
 
     /**
-    * @Route("/makePayment", methods={"POST"})
+     * @Route("/makePayment", name="make_payment", methods={"POST", "GET"})
     */
-    public function makePaymentCash()
+    public function makePaymentCash(): JsonResponse
     {
       // instance Response 
       $response     = new JsonResponse();
@@ -64,9 +64,9 @@ class CashController extends BaseRest
     }
 
     /**
-    * @Route("/statusCash", methods={"POST"})
+    * @Route("/statusCash", name="status_cash",  methods={"POST", "GET"})
     */
-    public function viewStatusCash()
+    public function viewStatusCash(): JsonResponse
     {
       // instance Response 
       $response    = new JsonResponse();
@@ -81,9 +81,9 @@ class CashController extends BaseRest
     }
 
     /**
-    * @Route("/removeCharge", methods={"POST"})
+    * @Route("/removeCharge", name="remove_charge",  methods={"POST", "DELETE"})
     */
-    public function removeChargeCash()
+    public function removeChargeCash(): JsonResponse
     {
       // instance Response 
       $response    = new JsonResponse();
@@ -98,9 +98,9 @@ class CashController extends BaseRest
     }
 
     /**
-    * @Route("/logCash", methods={"POST"})
+    * @Route("/logCash", name="log_cash",  methods={"POST", "GET"})
     */
-    public function logByDateCash()
+    public function logByDateCash(): JsonResponse
     {
       // instance Response 
       $response    = new JsonResponse();

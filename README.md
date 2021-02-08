@@ -1,4 +1,4 @@
-# API Caja registradora - Symfony5
+# API Caja registradora - Symfony 5.2.3
 
 Se realiza el desarrollo de la API teniendo con la siguiente estructura:
 
