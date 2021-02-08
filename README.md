@@ -10,7 +10,8 @@ Se realiza el desarrollo de la API teniendo con la siguiente estructura:
 
 ## Comentarios:
 
-Para validar el funcionamiento de la API puede acceder haceindo uso de los archivos enviados por correc electronico: postmanRequest.zip
+- Para validar el funcionamiento de la API puede acceder haciendo uso de la colección postman ubicada en el directorio postman en la raiz del proyecto
+- El script inicial de la base de datos lo encontrará en el directorio SQL, en la raiz del proyecto
 
 ### Requisitos🔧
 
@@ -23,8 +24,8 @@ Para validar el funcionamiento de la API puede acceder haceindo uso de los archi
 
 _ clonar el proyecto
 
-_ composer update para descargar los paquetes necesario
+- configurar los datos de conexión a MySQL en el archivo .env, parámetro: DATABASE_URL.
 
-_ en el directorio sql del proyecto puede incluir el script de creación de la base de datos
+_ composer update para descargar los paquetes necesario
 
 _ configurar los parámetros de conexión a la base de datos, en el archivo: .env
